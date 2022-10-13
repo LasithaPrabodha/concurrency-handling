@@ -4,7 +4,7 @@
 using System.ComponentModel.DataAnnotations;
 using UsersWebApi.Entities;
 
-public class UpdateRequest 
+public class UpdateRequest
 {
     public string Title { get; set; }
     public string FirstName { get; set; }
@@ -16,29 +16,10 @@ public class UpdateRequest
     [EmailAddress]
     public string Email { get; set; }
 
-    // treat empty string as null for password fields to 
-    // make them optional in front end apps
-    private string _password;
     [MinLength(6)]
-    public string Password
-    {
-        get => _password;
-        set => _password = replaceEmptyWithNull(value);
-    }
+    public string? Password { get; set; }
 
-    private string _confirmPassword;
     [Compare("Password")]
-    public string ConfirmPassword
-    {
-        get => _confirmPassword;
-        set => _confirmPassword = replaceEmptyWithNull(value);
-    }
+    public string? ConfirmPassword { get; set; }
 
-    // helpers
-
-    private string replaceEmptyWithNull(string value)
-    {
-        // replace empty string with null to make field optional
-        return string.IsNullOrEmpty(value) ? null : value;
-    }
 }

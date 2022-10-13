@@ -34,16 +34,30 @@ public class UsersController : ControllerBase
     [HttpPost]
     public IActionResult Create(CreateUserRequest model)
     {
-        _userService.Create(model);
-        return Ok(new { message = "User created" });
+        try
+        {
+            _userService.Create(model);
+            return Ok(new { message = "User created" });
+        }
+        catch (AppException ex)
+        {
+            return Problem(detail: ex.Message, statusCode: StatusCodes.Status500InternalServerError);
+        }
     }
 
     [HttpPut("{id}")]
     [UseOptimisticConcurrency]
     public async Task<IActionResult> Update(int id, UpdateRequest model)
     {
-        await _userService.Update(id, model);
-        return Ok(new { message = "User updated" });
+        try
+        {
+            await _userService.Update(id, model);
+            return Ok(new { message = "User updated" });
+        }
+        catch (AppException ex)
+        {
+            return Problem(detail: ex.Message, statusCode: StatusCodes.Status500InternalServerError);
+        }
 
     }
 
