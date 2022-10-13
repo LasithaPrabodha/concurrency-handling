@@ -1,5 +1,4 @@
-﻿namespace UsersWebApi.Helpers;
-
+﻿namespace UsersWebApi;
 
 using AutoMapper;
 using UsersWebApi.Entities;

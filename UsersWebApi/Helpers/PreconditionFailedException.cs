@@ -1,6 +1,7 @@
-﻿using System.Runtime.Serialization;
+﻿namespace UsersWebApi.Helpers;
 
-namespace UsersWebApi;
+using System.Runtime.Serialization;
+
 
 [Serializable]
 internal class PreconditionFailedException : Exception

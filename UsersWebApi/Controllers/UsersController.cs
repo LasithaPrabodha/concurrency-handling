@@ -1,7 +1,8 @@
 ﻿namespace UsersWebApi.Controllers;
 
 using AutoMapper;
-using Microsoft.AspNetCore.Mvc; 
+using Microsoft.AspNetCore.Mvc;
+using UsersWebApi.Helpers;
 using UsersWebApi.Models.Users;
 using UsersWebApi.Services;
 

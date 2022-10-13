@@ -1,4 +1,4 @@
-﻿namespace UsersWebApi.Helpers;
+﻿namespace UsersWebApi;
 
 using Microsoft.EntityFrameworkCore; 
 using UsersWebApi.Entities; 

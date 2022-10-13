@@ -1,4 +1,4 @@
-using UsersWebApi.Helpers;
+using UsersWebApi;
 using UsersWebApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
