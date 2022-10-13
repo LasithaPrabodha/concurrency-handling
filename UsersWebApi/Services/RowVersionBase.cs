@@ -4,7 +4,6 @@ namespace UsersWebApi.Services
 {
     public class RowVersionBase
     {
-        [Timestamp]
         public byte[] RowVersion { get; set; } = null!;
     }
 }
