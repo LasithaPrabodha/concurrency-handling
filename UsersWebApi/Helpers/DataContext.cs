@@ -1,10 +1,7 @@
 ﻿namespace UsersWebApi.Helpers;
 
-using Microsoft.EntityFrameworkCore;
-using System.Threading;
-using System.Threading.Tasks;
-using UsersWebApi.Entities;
-using UsersWebApi.Services;
+using Microsoft.EntityFrameworkCore; 
+using UsersWebApi.Entities; 
 
 public class DataContext : DbContext
 {

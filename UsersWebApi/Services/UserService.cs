@@ -6,6 +6,7 @@ using UsersWebApi.Entities;
 using UsersWebApi.Helpers;
 using UsersWebApi.Models.Users;
 
+
 public interface IUserService
 {
     IEnumerable<UserViewModel> GetAll();
