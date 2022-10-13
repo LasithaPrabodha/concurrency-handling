@@ -1,6 +1,5 @@
 ﻿namespace UsersWebApi.Controllers;
 
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using UsersWebApi.Helpers;
 using UsersWebApi.Models.Users;
@@ -11,14 +10,10 @@ using UsersWebApi.Services;
 public class UsersController : ControllerBase
 {
     private IUserService _userService;
-    private IMapper _mapper;
 
-    public UsersController(
-        IUserService userService,
-        IMapper mapper)
+    public UsersController(IUserService userService)
     {
         _userService = userService;
-        _mapper = mapper;
     }
 
     [HttpGet]
