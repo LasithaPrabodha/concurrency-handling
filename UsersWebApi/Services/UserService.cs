@@ -67,9 +67,7 @@ public class UserService : IUserService
     public async Task<int> Update(int id, UpdateRequestViewModel model)
     {
         var user = await getUser(id);
-
-        if (Convert.ToInt64(ByteArrayToHexString(user.RowVersion), 16) > Convert.ToInt64(ByteArrayToHexString(_changeContext.Timestamp), 16))
-            throw new PreconditionFailedException();
+        user.ResolveConcurrency(_changeContext.Timestamp);
 
         // validate
         if (model.Email != user.Email && _context.Users.Any(x => x.Email == model.Email))
@@ -82,11 +80,7 @@ public class UserService : IUserService
         // copy model to user and save
         _mapper.Map(model, user);
 
-        var noOfEntries = await _context.SaveChangesAsync();
-
-        _changeContext.Timestamp = user.RowVersion;
-
-        return noOfEntries;
+        return await _context.SaveChangesAsync();
     }
 
     public async void Delete(int id)
@@ -103,19 +97,5 @@ public class UserService : IUserService
         var user = await _context.Users.FindAsync(id);
         if (user == null) throw new KeyNotFoundException("User not found");
         return user;
-    }
-
-    private string ByteArrayToHexString(byte[] b)
-    {
-        System.Text.StringBuilder sb = new System.Text.StringBuilder();
-
-        sb.Append("0x");
-
-        foreach (byte val in b)
-        {
-            sb.Append(val.ToString("X2"));
-        }
-
-        return sb.ToString();
     }
 }
