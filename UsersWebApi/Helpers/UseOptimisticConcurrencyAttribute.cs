@@ -35,7 +35,7 @@ public class UseOptimisticConcurrencyAttribute : TypeFilterAttribute
                 {
                     try
                     {
-                        changeContext.Timestamp = Convert.FromBase64String(context.HttpContext.Request.Headers[MATCH_HEADER]);
+                        changeContext.Hash = Convert.ToInt32(context.HttpContext.Request.Headers[MATCH_HEADER]);
                     }
                     catch (FormatException)
                     {
@@ -51,9 +51,9 @@ public class UseOptimisticConcurrencyAttribute : TypeFilterAttribute
 
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            if (changeContext.Timestamp != null)
+            if (changeContext.Hash != 0 && context.HttpContext.Request.Method.Equals(HttpMethod.Get.Method))
             {
-                context.HttpContext.Response.Headers.Add(ETAG_HEADER, Convert.ToBase64String(changeContext.Timestamp));
+                context.HttpContext.Response.Headers.Add(ETAG_HEADER, changeContext.Hash.ToString());
             }
 
             if (context.Exception is DbUpdateConcurrencyException)

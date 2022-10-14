@@ -1,6 +1,6 @@
 ﻿namespace UsersWebApi.Models.Users;
 
-
+using System;
 using System.ComponentModel.DataAnnotations;
 using UsersWebApi.Entities;
 
@@ -21,5 +21,4 @@ public class UpdateRequestViewModel
 
     [Compare("Password")]
     public string? ConfirmPassword { get; set; }
-
 }

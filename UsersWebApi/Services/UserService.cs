@@ -40,10 +40,10 @@ public class UserService : IUserService
     public async Task<UserReponseViewModel> GetById(int id)
     {
         var user = await getUser(id);
-        _changeContext.Timestamp = user.RowVersion;
 
         var userVm = _mapper.Map<UserReponseViewModel>(user);
 
+        _changeContext.Hash = userVm.GetHashCode();
         return userVm;
     }
 
@@ -67,7 +67,10 @@ public class UserService : IUserService
     public async Task<int> Update(int id, UpdateRequestViewModel model)
     {
         var user = await getUser(id);
-        user.ResolveConcurrency(_changeContext.Timestamp);
+
+        var userVm = _mapper.Map<UserReponseViewModel>(user);
+
+        userVm.ResolveConcurrency(_changeContext.Hash);
 
         // validate
         if (model.Email != user.Email && _context.Users.Any(x => x.Email == model.Email))
