@@ -4,7 +4,7 @@
 using System.ComponentModel.DataAnnotations;
 using UsersWebApi.Entities;
 
-public class CreateUserRequest
+public class CreateUserRequestViewModel
 {
     [Required]
     public string Title { get; set; }

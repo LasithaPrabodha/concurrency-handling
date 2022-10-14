@@ -2,7 +2,7 @@
 
 using UsersWebApi.Entities;
 
-public class UserViewModel
+public class UserReponseViewModel
 {
     public int Id { get; set; }
     public string Title { get; set; }

@@ -4,7 +4,7 @@
 using System.ComponentModel.DataAnnotations;
 using UsersWebApi.Entities;
 
-public class UpdateRequest
+public class UpdateRequestViewModel
 {
     public string Title { get; set; }
     public string FirstName { get; set; }

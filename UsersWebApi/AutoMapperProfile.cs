@@ -8,10 +8,10 @@ public class AutoMapperProfile : Profile
 {
     public AutoMapperProfile()
     { 
-        CreateMap<CreateUserRequest, User>();
+        CreateMap<CreateUserRequestViewModel, User>();
          
-        CreateMap<UpdateRequest, User>();
+        CreateMap<UpdateRequestViewModel, User>();
 
-        CreateMap<User, UserViewModel>();
+        CreateMap<User, UserReponseViewModel>();
     }
 }

@@ -9,10 +9,10 @@ using UsersWebApi.Models.Users;
 
 public interface IUserService
 {
-    IEnumerable<UserViewModel> GetAll();
-    Task<UserViewModel> GetById(int id);
-    void Create(CreateUserRequest model);
-    Task<int> Update(int id, UpdateRequest model);
+    IEnumerable<UserReponseViewModel> GetAll();
+    Task<UserReponseViewModel> GetById(int id);
+    void Create(CreateUserRequestViewModel model);
+    Task<int> Update(int id, UpdateRequestViewModel model);
     void Delete(int id);
 }
 
@@ -32,22 +32,22 @@ public class UserService : IUserService
         _mapper = mapper;
     }
 
-    public IEnumerable<UserViewModel> GetAll()
+    public IEnumerable<UserReponseViewModel> GetAll()
     {
-        return _mapper.ProjectTo<UserViewModel>(_context.Users);
+        return _mapper.ProjectTo<UserReponseViewModel>(_context.Users);
     }
 
-    public async Task<UserViewModel> GetById(int id)
+    public async Task<UserReponseViewModel> GetById(int id)
     {
         var user = await getUser(id);
         _changeContext.Timestamp = user.RowVersion;
 
-        var userVm = _mapper.Map<UserViewModel>(user);
+        var userVm = _mapper.Map<UserReponseViewModel>(user);
 
         return userVm;
     }
 
-    public void Create(CreateUserRequest model)
+    public void Create(CreateUserRequestViewModel model)
     {
         // validate
         if (_context.Users.Any(x => x.Email == model.Email))
@@ -64,7 +64,7 @@ public class UserService : IUserService
         _context.SaveChanges();
     }
 
-    public async Task<int> Update(int id, UpdateRequest model)
+    public async Task<int> Update(int id, UpdateRequestViewModel model)
     {
         var user = await getUser(id);
 

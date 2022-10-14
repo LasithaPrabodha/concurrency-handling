@@ -32,7 +32,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Create(CreateUserRequest model)
+    public IActionResult Create(CreateUserRequestViewModel model)
     {
         try
         {
@@ -47,7 +47,7 @@ public class UsersController : ControllerBase
 
     [HttpPut("{id}")]
     [UseOptimisticConcurrency]
-    public async Task<IActionResult> Update(int id, UpdateRequest model)
+    public async Task<IActionResult> Update(int id, UpdateRequestViewModel model)
     {
         try
         {
