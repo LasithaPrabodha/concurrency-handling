@@ -69,10 +69,7 @@ public class UserService : IUserService
         var user = await getUser(id);
 
         if (Convert.ToInt64(ByteArrayToHexString(user.RowVersion), 16) > Convert.ToInt64(ByteArrayToHexString(_changeContext.Timestamp), 16))
-        {
-            _changeContext.Timestamp = user.RowVersion;
             throw new PreconditionFailedException();
-        }
 
         // validate
         if (model.Email != user.Email && _context.Users.Any(x => x.Email == model.Email))
