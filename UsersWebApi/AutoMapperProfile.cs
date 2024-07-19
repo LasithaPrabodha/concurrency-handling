@@ -14,7 +14,7 @@ public class AutoMapperProfile : Profile
         CreateMap<UpdateRequestViewModel, User>();
             //.ForMember(dest => dest.RowVersion, opt => opt.MapFrom(new CustomResolver()));
 
-        CreateMap<User, UserReponseViewModel>();
+        CreateMap<User, UserResponseViewModel>();
     }
 }
 

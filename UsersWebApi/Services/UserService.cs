@@ -9,8 +9,8 @@ using UsersWebApi.Models.Users;
 
 public interface IUserService
 {
-    IEnumerable<UserReponseViewModel> GetAll();
-    Task<UserReponseViewModel> GetById(int id);
+    IEnumerable<UserResponseViewModel> GetAll();
+    Task<UserResponseViewModel> GetById(int id);
     void Create(CreateUserRequestViewModel model);
     Task<int> Update(int id, UpdateRequestViewModel model);
     void Delete(int id);
@@ -19,7 +19,7 @@ public interface IUserService
 public class UserService : IUserService
 {
     private readonly ChangeContext _changeContext;
-    private DataContext _context;
+    private readonly DataContext _context;
     private readonly IMapper _mapper;
 
     public UserService(
@@ -32,16 +32,16 @@ public class UserService : IUserService
         _mapper = mapper;
     }
 
-    public IEnumerable<UserReponseViewModel> GetAll()
+    public IEnumerable<UserResponseViewModel> GetAll()
     {
-        return _mapper.ProjectTo<UserReponseViewModel>(_context.Users);
+        return _mapper.ProjectTo<UserResponseViewModel>(_context.Users);
     }
 
-    public async Task<UserReponseViewModel> GetById(int id)
+    public async Task<UserResponseViewModel> GetById(int id)
     {
         var user = await getUser(id);
 
-        var userVm = _mapper.Map<UserReponseViewModel>(user);
+        var userVm = _mapper.Map<UserResponseViewModel>(user);
 
         _changeContext.Hash = userVm.GetHashCode();
         return userVm;
@@ -68,7 +68,7 @@ public class UserService : IUserService
     {
         var user = await getUser(id);
 
-        var userVm = _mapper.Map<UserReponseViewModel>(user);
+        var userVm = _mapper.Map<UserResponseViewModel>(user);
 
         userVm.ResolveConcurrency(_changeContext.Hash);
 
@@ -97,8 +97,7 @@ public class UserService : IUserService
 
     private async Task<User> getUser(int id)
     {
-        var user = await _context.Users.FindAsync(id);
-        if (user == null) throw new KeyNotFoundException("User not found");
+        var user = await _context.Users.FindAsync(id) ?? throw new KeyNotFoundException("User not found");
         return user;
     }
 }
