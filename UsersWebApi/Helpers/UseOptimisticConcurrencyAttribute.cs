@@ -14,7 +14,7 @@ public class UseOptimisticConcurrencyAttribute : TypeFilterAttribute
     {
     }
 
-    private class UseOptimisticConcurrencyFilter : IActionFilter
+    private sealed class UseOptimisticConcurrencyFilter : IActionFilter
     {
         private readonly ChangeContext changeContext;
 
@@ -35,7 +35,7 @@ public class UseOptimisticConcurrencyAttribute : TypeFilterAttribute
                 {
                     try
                     {
-                        changeContext.Hash = Convert.ToInt32(context.HttpContext.Request.Headers[MATCH_HEADER]);
+                        changeContext.RowVersion = Convert.FromBase64String(context.HttpContext.Request.Headers[MATCH_HEADER]);
                     }
                     catch (FormatException)
                     {
@@ -51,17 +51,12 @@ public class UseOptimisticConcurrencyAttribute : TypeFilterAttribute
 
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            if (changeContext.Hash != 0 && context.HttpContext.Request.Method.Equals(HttpMethod.Get.Method))
+            if (changeContext.RowVersion != null && context.HttpContext.Request.Method.Equals(HttpMethod.Get.Method))
             {
-                context.HttpContext.Response.Headers.Add(ETAG_HEADER, changeContext.Hash.ToString());
+                context.HttpContext.Response.Headers.Add(ETAG_HEADER, Convert.ToBase64String(changeContext.RowVersion));
             }
 
             if (context.Exception is DbUpdateConcurrencyException)
-            {
-                context.Result = new ConflictResult();
-                context.ExceptionHandled = true;
-            }
-            else if (context.Exception is PreconditionFailedException)
             {
                 context.Result = new StatusCodeResult(StatusCodes.Status412PreconditionFailed);
                 context.ExceptionHandled = true;

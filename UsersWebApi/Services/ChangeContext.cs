@@ -2,7 +2,6 @@
 
 public class ChangeContext
 {
-    public int EntityId { get; set; }
-    public int Hash { get; set; } = 0;
+    public byte[]? RowVersion { get; set; }
 }
 

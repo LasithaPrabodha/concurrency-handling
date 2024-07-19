@@ -9,7 +9,7 @@ using UsersWebApi.Services;
 [Route("[controller]")]
 public class UsersController : ControllerBase
 {
-    private IUserService _userService;
+    private readonly IUserService _userService;
 
     public UsersController(IUserService userService)
     {
@@ -17,26 +17,27 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
     {
-        var users = _userService.GetAll();
+        var users = await _userService.GetAll(cancellationToken);
         return Ok(users);
     }
 
     [HttpGet("{id}")]
     [UseOptimisticConcurrency]
-    public async Task<IActionResult> GetById(int id)
+    public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken)
     {
-        var user = await _userService.GetById(id);
+        var user = await _userService.GetById(id, cancellationToken);
         return Ok(user);
     }
 
     [HttpPost]
-    public IActionResult Create(CreateUserRequestViewModel model)
+    [UseOptimisticConcurrency]
+    public async Task<IActionResult> Create(CreateUserRequestViewModel model, CancellationToken cancellationToken)
     {
         try
         {
-            _userService.Create(model);
+            await _userService.Create(model, cancellationToken);
             return Ok(new { message = "User created" });
         }
         catch (AppException ex)
@@ -47,11 +48,11 @@ public class UsersController : ControllerBase
 
     [HttpPut("{id}")]
     [UseOptimisticConcurrency]
-    public async Task<IActionResult> Update(int id, UpdateRequestViewModel model)
+    public async Task<IActionResult> Update(int id, UpdateRequestViewModel model, CancellationToken cancellationToken)
     {
         try
         {
-            await _userService.Update(id, model);
+            await _userService.Update(id, model, cancellationToken);
             return Ok(new { message = "User updated" });
         }
         catch (AppException ex)
@@ -62,9 +63,9 @@ public class UsersController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
     {
-        _userService.Delete(id);
+        await _userService.Delete(id, cancellationToken);
         return Ok(new { message = "User deleted" });
     }
 }
