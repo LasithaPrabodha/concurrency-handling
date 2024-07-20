@@ -3,7 +3,7 @@
 using System;
 using UsersWebApi.Entities;
 
-public class UserResponseViewModel
+public class UserHistoryResponseViewModel
 {
     public int Id { get; set; }
     public string Title { get; set; }
@@ -11,10 +11,7 @@ public class UserResponseViewModel
     public string LastName { get; set; }
     public string Email { get; set; }
     public Role Role { get; set; }
-
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(Id, Title, FirstName, LastName, Email, Role);
-    }
+    public DateTime ValidFrom { get; set; }
+    public DateTime ValidTo { get; set; }
 }
 

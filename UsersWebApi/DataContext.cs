@@ -1,7 +1,7 @@
 ﻿namespace UsersWebApi;
 
-using Microsoft.EntityFrameworkCore; 
-using UsersWebApi.Entities; 
+using Microsoft.EntityFrameworkCore;
+using UsersWebApi.Entities;
 
 public class DataContext : DbContext
 {
@@ -13,15 +13,22 @@ public class DataContext : DbContext
         Configuration = configuration;
     }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder options)
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        options.UseSqlServer(Configuration.GetConnectionString("WebApiDatabase"));
+        optionsBuilder.UseSqlServer(Configuration.GetConnectionString("WebApiDatabase"));
     }
 
-    protected override void OnModelCreating(ModelBuilder builder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        builder.Entity<User>()
-        .Property(x => x.RowVersion)
-        .IsRowVersion();
+        modelBuilder.Entity<User>()
+            .Property(x => x.RowVersion)
+            .IsRowVersion();
+
+        modelBuilder.Entity<User>().ToTable(t =>
+            t.IsTemporal(t =>
+            {
+                t.HasPeriodStart("ValidFrom");
+                t.HasPeriodEnd("ValidTo");
+            }));
     }
 }

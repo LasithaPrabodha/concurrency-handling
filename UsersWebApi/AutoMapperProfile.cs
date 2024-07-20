@@ -3,7 +3,7 @@
 using AutoMapper;
 using UsersWebApi.Entities;
 using UsersWebApi.Helpers;
-using UsersWebApi.Models.Users;
+using UsersWebApi.ViewModels.Users;
 
 public class AutoMapperProfile : Profile
 {

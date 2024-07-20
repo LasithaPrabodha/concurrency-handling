@@ -1,9 +1,11 @@
 ﻿namespace UsersWebApi.Controllers;
 
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using UsersWebApi.Helpers;
-using UsersWebApi.Models.Users;
+using UsersWebApi.ViewModels.Users;
 using UsersWebApi.Services;
+using Microsoft.EntityFrameworkCore;
 
 [ApiController]
 [Route("[controller]")]
@@ -29,6 +31,27 @@ public class UsersController : ControllerBase
     {
         var user = await _userService.GetById(id, cancellationToken);
         return Ok(user);
+    }
+
+    [HttpGet("{id}/history")]
+    public async Task<IActionResult> GetByIdWithHistory(int id, [FromQuery] GetUserHistoryRequestViewModel viewModel, CancellationToken cancellationToken)
+    {
+        var userWithHistory = await _userService.GetByIdWithHistory(id, viewModel, cancellationToken);
+        return Ok(userWithHistory);
+    }
+
+    [HttpPatch("{id}")]
+    public async Task<IActionResult> RestoreToVersion(int id, [Required] DateTime restorePoint, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await _userService.RestoreToVersion(id, restorePoint, cancellationToken);
+            return Ok();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            return new StatusCodeResult(StatusCodes.Status412PreconditionFailed);
+        }
     }
 
     [HttpPost]
